@@ -10,13 +10,15 @@ import math
 from networktables import NetworkTables
 import time
 
-print("current version  - 4.5")
+print("current version  - 5")
 
 #fov = 39.63915899594
 FOV = 27.7665349671
 tan_frame = math.tan(math.radians(FOV))
 CAM_PATH = 'http://root:root@10.45.86.12/mjpg/video.mjpg'
-CAM_PATH = 0
+DEBUG = False   #<------------------------------
+ISPI = True
+
 #creates a list of the img names from
 #the #"v" folder
 def getCam(Path):
@@ -41,14 +43,7 @@ def getStartingPointBySlope(cnts):
             i =1
         return i
 #creates the class obj
-DEBUG = True    #<------------------------------
 
-
-
-
-
-
-ISPI = False
 
 if(not DEBUG):
     ISPI = True
@@ -62,7 +57,6 @@ t = helperClass("slidersWin",ISPI,jSON_PATH)
 
 
 
-#gets
 cap = getCam(CAM_PATH)
 
 
@@ -84,7 +78,7 @@ difCounter = 0
 imgC = 0
 
 while(True):
-    try:
+    # try:
         smallestDistance = 10000
         start_time = time.time()
         try:
@@ -94,20 +88,20 @@ while(True):
             cap = getCam(CAM_PATH)
             continue
 
-        #frame = cv2.imread(mypath+images[imgC]) #<
-        frame = cv2.GaussianBlur(frame,(5,5),0)
+        # frame = cv2.imread(mypath+images[imgC]) #<
+        # frame = cv2.GaussianBlur(frame,(5,5),0)
         f_height , f_width = frame.shape[:2]
         if DEBUG:
             t.writeHSVvals()
         upper,lower = t.getHSV()
-        midFrame = f_width/2 - 10 #koksinal     #<-------------------------------------------------------------------
+        midFrame = f_width/2 - 15 #koksinel     #<-------------------------------------------------------------------
         bitImg,mask,_ = t.createMask(frame,lower,upper)
         contours,_ = cv2.findContours(mask,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)
         filterCnts = []
         #filter the contuores
         for cnt in contours:
             S = cv2.contourArea(cnt)
-            if S > 50:
+            if S > 70:
                 filterCnts.append(cnt)
                 
         #if the number of filter contours makes sense
@@ -141,17 +135,17 @@ while(True):
                     tan_alfa = (midx[i] - midFrame)*tan_frame/midFrame
                     Fdis = dis[i]
                     #print Fdis
-                    #d1 = (20.32*midFrame)/(Fdis*tan_frame)
-                    #d2 = d1/math.cos(tan_alfa)
+                    d1 = (20.32*midFrame)/(Fdis*tan_frame)
+                    d2 = d1/math.cos(tan_alfa)
                     #print "first",d2
-                    if 2 < smallestDistance:
-                        #smallestDistance = d2
+                    if(2 < smallestDistance):
+                        smallestDistance = d2
                         alfa = math.degrees(math.atan(tan_alfa))
                     else:
                         difCounter += 1
                         
                 table.putValue('angle', alfa)
-                # print(alfa)
+                print(alfa)
                 # print "second", distance1
                 #print(alfa)
                 # print "running"
@@ -159,20 +153,20 @@ while(True):
             else:
                 table.putValue('angle', -999)
         if(not cap.isOpened()):
-            break
+            continue
+
+
         end_time = time.time()
         k = cv2.waitKey(1)
         if DEBUG:
             cv2.line(bitImg,(int(midFrame),0),(int(midFrame),1000),(255,0,0)) #<---
-            #cv2.imshow(winName,sliders)            #<-----
             cv2.imshow("bitImg",bitImg)        #<-----
             cv2.imshow("mask",mask)        #<-----
-            #print(k)
             if k == 27:
                 break
-    except:
-        table.putValue('angle', -999)
-        print("------excepted.------")
-        cap = getCam(CAM_PATH)
+    # except:
+    #     table.putValue('angle', -999)
+    #     print("------excepted.------")
+    #     # cap = getCam(CAM_PATH)
 cv2.destroyAllWindows()
 os._exit(0)

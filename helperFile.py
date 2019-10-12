@@ -2,6 +2,16 @@ import cv2
 import numpy as np
 import math
 import json
+class point:
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+    def subtract(self,p):
+        self.x -= p.x
+        self.y -= p.y   
+    def getAngle():
+        return math.degrees(math.atan(y/x))
+ 
 class helperClass:
     def __init__(self,winName,isPi,path):
         self.winName = winName
@@ -13,6 +23,12 @@ class helperClass:
     #gets distance between 2 points
     def distance(self,x1,y1,x2,y2):
         return math.sqrt((x1-x2)**2+(y1-y2)**2)
+
+    def getRealAlfa(self,alfa,dis):
+        target = point(dis * math.cos(math.radians(alfa)),dis * math.sin(math.radians(alfa)))
+        offset = point(0,2.5)
+        target.subtract(offset)
+        return target.getAngle()
     #returns the HSV values
     def writeHSVvals(self):
         #json thingy
