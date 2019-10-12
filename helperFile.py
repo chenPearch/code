@@ -9,7 +9,7 @@ class point:
     def subtract(self,p):
         self.x -= p.x
         self.y -= p.y   
-    def getAngle():
+    def getAngle(self):
         return math.degrees(math.atan(y/x))
  
 class helperClass:
