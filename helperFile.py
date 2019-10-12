@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import os
 import math
 import json
 class point:
@@ -10,7 +11,7 @@ class point:
         self.x -= p.x
         self.y -= p.y   
     def getAngle(self):
-        return math.degrees(math.atan(y/x))
+        return math.degrees(math.atan(self.y/self.x))
  
 class helperClass:
     def __init__(self,winName,isPi,path):
@@ -20,6 +21,23 @@ class helperClass:
         self.vals = json.load(open(self.path))
     def nothing(self,x):
         pass
+    def getCam(self,Path):
+        flag = False
+        while(not flag):
+            print("connecting to camera")
+            cap = cv2.VideoCapture(Path) #<
+            # cap = cv2.VideoCapture(0)
+            # cap = cv2.VideoCapture('http://root:root@192.168.1.21/mjpg/video.mjpg')
+            if(cap.isOpened()):
+                flag = True
+        return cap
+
+    def getImagePaths(self,pathToImages):
+        files = []
+        for r,d,f in os.walk(pathToImages):
+            for file in f:
+                files.append(pathToImages+"/"+file)
+        return files
     #gets distance between 2 points
     def distance(self,x1,y1,x2,y2):
         return math.sqrt((x1-x2)**2+(y1-y2)**2)

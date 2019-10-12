@@ -1,6 +1,4 @@
- 2 < smallestDistance:
-                        #smallestDistance = d2
-                        alfa = math.degrees(math.atan(tan_alfa))
-                    else:
-                        difCounter += 1
-                        
+
+    #     table.putValue('angle', -999)
+    #     print("------excepted.------")
+    #     cap = t.getCam(CAM_PATH)
