@@ -34,8 +34,6 @@ def getStartingPointBySlope(cnts):
 #creates the class obj
 
 
-if(not DEBUG):
-    ISPI = True
 
 if(ISPI):
     jSON_PATH = "/home/pi/frcvision/HSVdata.json"
@@ -71,8 +69,6 @@ while(True):
         start_time = time.time()
         _,frame = cap.read()
 
-        # frame = cv2.imread(imagePathes[imgC%len(imagePathes)]) #<
-        # frame = cv2.GaussianBlur(frame,(5,5),0)
         f_height , f_width = frame.shape[:2]
         if DEBUG:
             t.writeHSVvals()
@@ -119,8 +115,8 @@ while(True):
                     tan_alfa = (midx[i] - midFrame)*tan_frame/midFrame
                     Fdis = dis[i]
                     #print Fdis
-                    d1 = (20.32*midFrame)/(Fdis*tan_frame)
-                    d2 = d1/math.cos(tan_alfa)
+                    d2 = (20.32*midFrame)/(Fdis*tan_frame)
+                    d2 = d2/math.cos(tan_alfa)
                     #print "first",d2
                     if(d2 < smallestDistance):
                         smallestDistance = d2
@@ -130,8 +126,8 @@ while(True):
                         difCounter += 1
                         
                 table.putValue('angle', alfa)
+                table.putValue('ditance',smallestDistance)
                 print("first angle:",firstangle,"alfa:",alfa)
-
                 # table.putValue('distance', d2)
             else:
                 table.putValue('angle', -999)
@@ -143,10 +139,6 @@ while(True):
             cv2.line(bitImg,(int(midFrame),0),(int(midFrame),1000),(255,0,0)) #<---
             cv2.imshow("bitImg",bitImg)        #<-----
             cv2.imshow("mask",mask) 
-            if(k == 119):
-                imgC += 1
-            if(k == 115):
-                imgC -= 1
             if k == 27:
                 break
     except:
