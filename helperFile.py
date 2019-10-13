@@ -44,7 +44,7 @@ class helperClass:
 
     def getRealAlfa(self,alfa,dis):
         target = point(dis * math.cos(math.radians(alfa)),dis * math.sin(math.radians(alfa)))
-        offset = point(0,2.5)
+        offset = point(0,-8)
         target.subtract(offset)
         return target.getAngle()
     #returns the HSV values

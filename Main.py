@@ -130,7 +130,7 @@ while(True):
                         difCounter += 1
                         
                 table.putValue('angle', alfa)
-                # print("first angle:",firstangle,"alfa:",alfa)
+                print("first angle:",firstangle,"alfa:",alfa)
 
                 # table.putValue('distance', d2)
             else:
